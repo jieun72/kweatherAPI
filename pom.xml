@@ -13,7 +13,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>API</name>
 	<packaging>war</packaging>
-	<description>스마트시티 오염예측 api</description>
+	<description>스마트시티 환경과학기술v1.1 api</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -76,6 +76,7 @@
     </dependencies>
 
 	<build>
+		<finalName>kestiAirPollutionPredict</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
