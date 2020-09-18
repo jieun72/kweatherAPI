@@ -74,8 +74,11 @@
           <element id="library" level="project" name="Maven: javax.xml.bind:jaxb-api:2.3.0" />
           <element id="library" level="project" name="Maven: org.javassist:javassist:3.23.1-GA" />
           <element id="library" level="project" name="Maven: jakarta.xml.bind:jakarta.xml.bind-api:2.3.3" />
+          <element id="library" level="project" name="Maven: org.hamcrest:hamcrest:2.1" />
           <element id="library" level="project" name="Maven: org.springframework:spring-core:5.2.5.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-jcl:5.2.5.RELEASE" />
+          <element id="library" level="project" name="Maven: junit:junit:4.12" />
+          <element id="library" level="project" name="Maven: org.hamcrest:hamcrest-core:2.1" />
         </element>
       </element>
       <element id="directory" name="META-INF">
