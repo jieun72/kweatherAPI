@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.API.main.CompositeKey.Spot_group_cd_CompositeKey;
@@ -53,7 +55,8 @@ public class spot_group_cd
 		this.upper_cd = upper_cd;
 	}
 
-	@Column(name="spot_cd", nullable=false)
+	@ManyToOne
+	@JoinColumn(name="spot_cd", nullable=false)
 	public String getSpot_cd() {
 		return spot_cd;
 	}
@@ -107,10 +110,14 @@ public class spot_group_cd
 		this.chg_id = chg_id;
 	}
 
+	
 	@Override
 	public String toString() {
-		return "spot_group_cd [upper_cd=" + upper_cd + ", spot_cd=" + spot_cd + ", spot_nm=" + spot_nm + ", reg_dt="
-				+ reg_dt + ", reg_id=" + reg_id + ", chg_dt=" + chg_dt + ", chg_id=" + chg_id + "]";
+		return "{"
+				+" upperCd =" + upper_cd +","
+				+" spotCd =" + spot_cd + ","
+				+" spotNm =" + spot_nm + "}";
+		
 	}
 	
 	

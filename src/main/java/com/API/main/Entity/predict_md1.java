@@ -7,7 +7,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
@@ -68,7 +70,8 @@ public class predict_md1
 		this.chg_id = chg_id;
 	}
 
-	@Column(name="spot_cd", nullable=false)
+	@ManyToOne
+	@JoinColumn(name="spot_cd", nullable=false)
 	public String getSpot_cd() {
 		return spot_cd;
 	}
@@ -208,10 +211,10 @@ public class predict_md1
 
 	@Override
 	public String toString() {
-		return "predict_md2 [spot_cd=" + spot_cd + ", prd_date=" + prd_date + ", prd_time=" + prd_time + ", spot_lat="
-				+ spot_lat + ", spot_lon=" + spot_lon + ", chk_fine_dust=" + chk_fine_dust + ", chk_ultrafine_dust="
-				+ chk_ultrafine_dust + ", ozone=" + ozone + ", carbon_monoxide=" + carbon_monoxide
-				+ ", nitrogen_dioxide=" + nitrogen_dioxide + ", sulfur_dioxide=" + sulfur_dioxide + ", reg_dt=" + reg_dt
+		return "predict_md1 [spotNm=" + spot_cd + ", prdDate=" + prd_date + ", prdTime=" + prd_time + ", spotLat="
+				+ spot_lat + ", spotLon=" + spot_lon + ", pm10=" + chk_fine_dust + ", pm2p5="
+				+ chk_ultrafine_dust + ", o3=" + ozone + ", co=" + carbon_monoxide
+				+ ", no2=" + nitrogen_dioxide + ", so2=" + sulfur_dioxide + ", reg_dt=" + reg_dt
 				+ ", reg_id=" + reg_id + ", chg_dt=" + chg_dt + ", chg_id=" + chg_id + "]";
 	}
 

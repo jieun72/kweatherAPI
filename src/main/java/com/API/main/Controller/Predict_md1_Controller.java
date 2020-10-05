@@ -2,6 +2,7 @@ package com.API.main.Controller;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.validation.Valid;
 
+import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +32,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.API.main.Entity.predict_md1;
+import com.API.main.Entity.predict_md2;
 import com.API.main.Repository.Predict_md1_Repository;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.API.main.Exception.ResourceNotFoundException;
 @RestController
-@RequestMapping("/KESTI/v1.1")
+@RequestMapping("/timePrdtList")
 public class Predict_md1_Controller 
 {
+	//preety 사용 하기 위한 gson
+	private static final Gson gson = new GsonBuilder()
+			           .setPrettyPrinting()
+			           .create();
+			
 	@PersistenceContext
 	EntityManager em;
 	
@@ -47,143 +59,324 @@ public class Predict_md1_Controller
 	{
 		return predict_md1_Repository.findAll();
 	}
-	@GetMapping("/md1/search")
-	public List<predict_md1> test(@RequestParam(value="spot_cd",required = false) String spot_cd_val, @RequestParam(value="prd_date",required = false) String prd_date_val, @RequestParam(value="prd_time",required = false) String prd_time_val)
+	
+	
+	@GetMapping("/test")
+	public String test(@RequestParam HashMap<String,String> paramMap)
 	{
-		/*
-		 * EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa");
-		 * EntityManager em = emf.createEntityManager();
-		 */
-		TypedQuery<predict_md1> query = null;
+		String t = "";
 		
-		if((spot_cd_val!=null)&&(prd_date_val!=null)&&(prd_time_val!=null))
-		{
-			query = em.createQuery("FROM predict_md1  WHERE spot_cd=:spot_cd AND prd_date=:prd_date AND prd_time=:prd_time", predict_md1.class)
-					.setParameter("spot_cd", spot_cd_val)
-					.setParameter("prd_date",prd_date_val)
-					.setParameter("prd_time",prd_time_val);
-		}
-		else if((spot_cd_val!=null)&&(prd_date_val==null)&&(prd_time_val!=null))
-		{
-			query = em.createQuery("FROM predict_md1  WHERE spot_cd=:spot_cd AND cal_mode=:cal_mode", predict_md1.class)
-					.setParameter("spot_cd", spot_cd_val)
-					.setParameter("prd_time",prd_time_val);
-		}
-		else if((spot_cd_val!=null)&&(prd_date_val!=null)&&(prd_time_val==null))
-		{
-			query = em.createQuery("FROM predict_md1  WHERE spot_cd=:spot_cd AND prd_date=:prd_date", predict_md1.class)
-					.setParameter("spot_cd", spot_cd_val)
-					.setParameter("prd_date",prd_date_val);
-		}
-		else if((spot_cd_val==null)&&(prd_date_val!=null)&&(prd_time_val!=null))
-		{
-			query = em.createQuery("FROM predict_md1  WHERE  prd_date=:prd_date AND prd_time=:prd_time", predict_md1.class)
-					.setParameter("prd_date",prd_date_val)
-					.setParameter("prd_time",prd_time_val);
-		}
-		else if((spot_cd_val!=null)&&(prd_date_val==null)&&(prd_time_val==null))
-		{
-			query = em.createQuery("FROM predict_md1  WHERE spot_cd=:spot_cd", predict_md1.class)
-					.setParameter("spot_cd", spot_cd_val);
-		}
-		else if((spot_cd_val==null)&&(prd_date_val!=null)&&(prd_time_val==null))
-		{
-			query = em.createQuery("FROM predict_md1  WHERE  prd_date=:prd_date", predict_md1.class)
-					.setParameter("prd_date",prd_date_val);
-		}
-		else if((spot_cd_val==null)&&(prd_date_val==null)&&(prd_time_val!=null))
-		{
-			query = em.createQuery("FROM predict_md1  WHERE prd_time=:prd_time", predict_md1.class)
-					.setParameter("prd_time",prd_time_val);
-		}
+		List<Object[]> lst =em.createQuery("select cd.spot_nm, md1.prd_date, md1.prd_time, md1.spot_lat, md1.spot_lon, md1.chk_fine_dust, md1.ozone, md1.carbon_monoxide, md1.nitrogen_dioxide, md1.sulfur_dioxide " + 
+				"from predict_md1 md1," + 
+				"     spot_group_cd cd " + 
+				"where md1.spot_cd = cd.spot_cd " +
+				      "and md1.spot_cd=:spot_cd")
+				.setParameter("spot_cd", "SH02").getResultList();
+		Object[] test = lst.get(0);
+		
+		System.out.println(test[0]);
+		
+		return t;
+	}
+	@GetMapping("/getMd1List")
+	public String getMd1List(@RequestParam HashMap<String,String> paramMap)
+	{
+		boolean err = false;
+		//변수가 제대로 들어왔는지 체크하기 위함
+		String spot_cd_val = paramMap.get("spotCd");
+		String prd_date_val = paramMap.get("prdDate");
+		String prd_time_val = paramMap.get("prdTime");
+		
+		//obj 에 담기위한 선언
+		final JsonObject gobj = new JsonObject();
+		//쿼리 사용하기 위한 선언
+		TypedQuery<predict_md1> query = null;
+		List<Object[]> lst=null;
+		
+		//들어온 개수를 파악하기 위함 ( err code 발생 조건을 채우기 위함)
+		int param_num = paramMap.size();
+		
+		//마지막 에 변환 해주기위한 array
+		JSONArray req_array = new JSONArray();
+		
+		String json="";
 		
 		
 		List<predict_md1> list = null;
-		if(query != null)
+		
+		
+		//time 이 1자리숫자로 들어왔을때를 대비
+		if(prd_time_val!=null && prd_time_val.length()==1)
 		{
-			list = query.getResultList();
+			prd_time_val = "0" + prd_time_val;
 		}
 		
-		return list;
-	}
-	/*public List<predict_md2> test(@RequestParam("spot_cd") String spot_cd, @RequestParam("prd_date") String prd_date, @RequestParam("cal_mode") String cal_mode)
-	{
-		if((spot_cd!=null)&&(prd_date!=null)&&(cal_mode!=null))
+		
+		
+		if((spot_cd_val!=null)&&(prd_date_val!=null)&&(prd_time_val!=null))
 		{
-			if((cal_mode=="AVG")||(cal_mode=="SDD")||(cal_mode=="MIN")||(cal_mode=="MAX"))
+			if(spot_cd_val.length()!=4 || spot_cd_val.length()!=4 || !spot_cd_val.contains("SH") || prd_time_val.length()>2)
 			{
-				return predict_md2_Repository.findBymdALL(spot_cd, prd_date, cal_mode);
+				gobj.addProperty("resultCode", "02");
+				gobj.addProperty("resultMsg","ERROR");
+				gobj.addProperty("totalCount", "0");
+				err = true;
 			}
 			else
 			{
-				return null;
+				lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide" + 
+						"from kweather_api.predict_md1 AS md1, " + 
+						"     kweather_api.spot_group_cd AS cd " + 
+						"where md1.spot_cd = cd.spot_cd " +
+						      "and md1.spot_cd=:spot_cd " +
+						      "and md1.prd_date=:prd_date " +
+						      "and md1.prd_time=:prd_time ")
+						.setParameter("md1.spot_cd", spot_cd_val)
+						.setParameter("md1.prd_date",prd_date_val)
+						.setParameter("md1.prd_time",prd_time_val).getResultList();
 			}
+			
 		}
-		else if((spot_cd!=null)&&(prd_date==null)&&(cal_mode!=null))
+		else if((spot_cd_val!=null)&&(prd_date_val==null)&&(prd_time_val!=null))
 		{
-			if((cal_mode=="AVG")||(cal_mode=="SDD")||(cal_mode=="MIN")||(cal_mode=="MAX"))
+			if(param_num != 2) // 파라미터는 2개가 들어와야 정상.
 			{
-				return predict_md2_Repository.findBycd_mode(spot_cd, cal_mode);
+				gobj.addProperty("resultCode", "01");
+				gobj.addProperty("resultMsg","ERROR");
+				gobj.addProperty("count","0");
+				err = true;
 			}
 			else
 			{
-				return null;
+				if(spot_cd_val.length()!=4 || !spot_cd_val.contains("SH") ||  prd_time_val.length()>2)
+				{
+					gobj.addProperty("resultCode", "02");
+					gobj.addProperty("resultMsg","ERROR");
+					gobj.addProperty("totalCount", "0");
+					err = true;
+				}
+				else
+				{
+					lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide" + 
+							"from kweather_api.predict_md1 AS md1, " + 
+							"     kweather_api.spot_group_cd AS cd " + 
+							"where md1.spot_cd = cd.spot_cd " +
+							      "and md1.spot_cd=:spot_cd " +
+							      "and md1.prd_time=:prd_time ")
+							.setParameter("spot_cd", spot_cd_val)
+							.setParameter("prd_time",prd_time_val).getResultList();
+				}
 			}
+			
 		}
-		else if((spot_cd!=null)&&(prd_date!=null)&&(cal_mode==null))
+		else if((spot_cd_val!=null)&&(prd_date_val!=null)&&(prd_time_val==null))
 		{
-			if((cal_mode=="AVG")||(cal_mode=="SDD")||(cal_mode=="MIN")||(cal_mode=="MAX"))
+			if(param_num != 2) // 파라미터는 2개가 들어와야 정상.
 			{
-				return predict_md2_Repository.findBycd_date(spot_cd, prd_date);
+				gobj.addProperty("resultCode", "01");
+				gobj.addProperty("resultMsg","ERROR");
+				gobj.addProperty("count","0");
+				err = true;
 			}
 			else
 			{
-				return null;
+				if(spot_cd_val.length()!=4 || !spot_cd_val.contains("SH") ||  prd_date_val.length()!=8)
+				{
+					gobj.addProperty("resultCode", "02");
+					gobj.addProperty("resultMsg","ERROR");
+					gobj.addProperty("totalCount", "0");
+					err = true;
+				}
+				else
+				{
+					lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide" + 
+							"from kweather_api.predict_md1 AS md1, " + 
+							"     kweather_api.spot_group_cd AS cd " + 
+							"where md1.spot_cd = cd.spot_cd " +
+							      "and md1.spot_cd=:spot_cd " +
+							      "and md1.prd_date=:prd_date ")
+							.setParameter("spot_cd", spot_cd_val)
+							.setParameter("prd_date",prd_date_val).getResultList();
+				}
 			}
+			
 		}
-		else if((spot_cd==null)&&(prd_date!=null)&&(cal_mode!=null))
+		else if((spot_cd_val==null)&&(prd_date_val!=null)&&(prd_time_val!=null))
 		{
-			if((cal_mode=="AVG")||(cal_mode=="SDD")||(cal_mode=="MIN")||(cal_mode=="MAX"))
+			if(param_num != 2) // 파라미터는 2개가 들어와야 정상.
 			{
-				return predict_md2_Repository.findBymddate_mode(prd_date, cal_mode);
+				gobj.addProperty("resultCode", "01");
+				gobj.addProperty("resultMsg","ERROR");
+				gobj.addProperty("count","0");
+				err = true;
 			}
 			else
 			{
-				return null;
+				if(prd_date_val.length()!=8 ||  prd_time_val.length()>2)
+				{
+					gobj.addProperty("resultCode", "02");
+					gobj.addProperty("resultMsg","ERROR");
+					gobj.addProperty("totalCount", "0");
+					err = true;
+				}
+				else
+				{
+					lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide" + 
+							"from kweather_api.predict_md1 AS md1," + 
+							"     kweather_api.spot_group_cd AS cd " + 
+							"where md1.spot_cd = cd.spot_cd " +
+							      "and md1.spot_cd=:spot_cd_val " +
+							      "and md1.prd_date=:prd_date " +
+							      "and md1.prd_time=:prd_time ")
+							.setParameter("prd_date",prd_date_val)
+							.setParameter("prd_time",prd_time_val).getResultList();
+				}
 			}
+			
+			
 		}
-		else if((spot_cd!=null)&&(prd_date==null)&&(cal_mode==null))
+		else if((spot_cd_val!=null)&&(prd_date_val==null)&&(prd_time_val==null))
 		{
-			return predict_md2_Repository.findBycd(spot_cd);
-		}
-		else if((spot_cd==null)&&(prd_date!=null)&&(cal_mode==null))
-		{
-			return predict_md2_Repository.findBymddate(prd_date);
-		}
-		else if((spot_cd==null)&&(prd_date==null)&&(cal_mode!=null))
-		{
-			if((cal_mode=="AVG")||(cal_mode=="SDD")||(cal_mode=="MIN")||(cal_mode=="MAX"))
+			if(param_num != 1) // 파라미터는 1개가 들어와야 정상.
 			{
-				return predict_md2_Repository.findBymdmode(cal_mode);
+				gobj.addProperty("resultCode", "01");
+				gobj.addProperty("resultMsg","ERROR");
+				gobj.addProperty("count","0");
+				err = true;
 			}
 			else
 			{
-				return null;
+				if(spot_cd_val.length()!=4 || !spot_cd_val.contains("SH") )
+				{
+					gobj.addProperty("resultCode", "02");
+					gobj.addProperty("resultMsg","ERROR");
+					gobj.addProperty("totalCount", "0");
+					err = true;
+				}
+				else
+				{
+					lst =em.createQuery("select cd.spot_nm, md1.prd_date, md1.prd_time, md1.spot_lat, md1.spot_lon, md1.chk_fine_dust,md1.chk_ultrafine_dust, md1.ozone, md1.carbon_monoxide, md1.nitrogen_dioxide, md1.sulfur_dioxide " + 
+							"from predict_md1 md1," + 
+							"     spot_group_cd cd " + 
+							"where md1.spot_cd = cd.spot_cd " +
+							      "and md1.spot_cd=:spot_cd")
+							.setParameter("spot_cd", spot_cd_val).getResultList();
+				}
+			}
+			
+		}
+		else if((spot_cd_val==null)&&(prd_date_val!=null)&&(prd_time_val==null))
+		{
+			if(param_num != 1) // 파라미터는 1개가 들어와야 정상.
+			{
+				gobj.addProperty("resultCode", "01");
+				gobj.addProperty("resultMsg","ERROR");
+				gobj.addProperty("count","0");
+				err = true;
+			}
+			else
+			{
+				if(prd_date_val.length()!=8)
+				{
+					gobj.addProperty("resultCode", "02");
+					gobj.addProperty("resultMsg","ERROR");
+					gobj.addProperty("totalCount", "0");
+					err = true;
+				}
+				else
+				{
+					lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide" + 
+							"from kweather_api.predict_md1 AS md1," + 
+							"     kweather_api.spot_group_cd AS cd " + 
+							"where md1.spot_cd = cd.spot_cd " +
+							      "and md1.prd_date=:prd_date" )
+							.setParameter("prd_date",prd_date_val).getResultList();
+				}
+			}
+			
+		}
+		else if((spot_cd_val==null)&&(prd_date_val==null)&&(prd_time_val!=null))
+		{
+			if(param_num != 1) // 파라미터는 1개가 들어와야 정상.
+			{
+				gobj.addProperty("resultCode", "01");
+				gobj.addProperty("resultMsg","ERROR");
+				gobj.addProperty("count","0");
+				err = true;
+			}
+			else
+			{
+				if(prd_time_val.length()>2)
+				{
+					gobj.addProperty("resultCode", "02");
+					gobj.addProperty("resultMsg","ERROR");
+					gobj.addProperty("totalCount", "0");
+					err = true;
+				}
+				else
+				{
+					lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide" + 
+							"from kweather_api.predict_md1 AS md1," + 
+							"     kweather_api.spot_group_cd AS cd " + 
+							"where md1.spot_cd = cd.spot_cd " +
+							      "and md1.prd_time=:prd_time")
+							.setParameter("prd_time",prd_time_val).getResultList();
+				}
 			}
 		}
 		else
 		{
-			return null;
+			gobj.addProperty("resultCode", "99");
+			gobj.addProperty("resultMsg","ERROR");
+			gobj.addProperty("count","0");
+			
+			err = true;
 		}
+		
+		
+		
+		//에러가 발생 하였다면
+		if(!err)
+		{
+			JsonArray ja = new JsonArray();
+			
+			
+			for(int i=0;i<lst.size();i++)
+			{
+				final JsonObject gobj_buff = new JsonObject();
+				Object[] buff = lst.get(i);
+				
+				gobj_buff.addProperty("spotNm",buff[0].toString());
+				gobj_buff.addProperty("prdDate",buff[1].toString());
+				gobj_buff.addProperty("prdTime",buff[2].toString());
+				
+				gobj_buff.addProperty("spotLat",buff[3].toString());
+				gobj_buff.addProperty("spotLon",buff[4].toString());
+				gobj_buff.addProperty("pm10",buff[5].toString());
+				gobj_buff.addProperty("pm2p5",buff[6].toString());
+				gobj_buff.addProperty("o3",buff[7].toString());
+				gobj_buff.addProperty("co",buff[8].toString());
+				gobj_buff.addProperty("no2",buff[9].toString());
+				gobj_buff.addProperty("so2",buff[10].toString());
+				
+				ja.add(gobj_buff);
+			}
+			gobj.addProperty("resultCode", "00");
+			gobj.addProperty("resultMsg","SUCCESS");
+			gobj.addProperty("count",lst.size());
+			gobj.add("list",ja);
+			
+			
+			
+			//list = query.getResultList();
+			//json Object 를 array 에 담은후 해당 내용을 다시 json object 의 하나의 요소로 넣어 뽑기위한 전처리 작업.
+			
+			
+		}
+		req_array.add(gobj);
+		json= gson.toJson(req_array);
+		
+		return json;
 	}
 	
-	*/
-	/*
-	 * @GetMapping("/codegroup/{id}") public ResponseEntity<CodeGroup>
-	 * getCodeGroupById(@PathVariable(value = "id") String cd_group_id) throws
-	 * ResourceNotFoundException { CodeGroup codegroup =
-	 * codegroupRepository.findById(cd_group_id).orElseThrow(()->new
-	 * ResourceNotFoundException("CodeGroup not found for this id :: " +
-	 * cd_group_id)); return ResponseEntity.ok().body(codegroup); }
-	 */
 }

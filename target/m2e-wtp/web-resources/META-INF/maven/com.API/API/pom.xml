@@ -13,7 +13,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>API</name>
 	<packaging>war</packaging>
-	<description>Demo project for Spring Boot</description>
+	<description>스마트시티 환경과학기술v1.1 api</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -69,9 +69,14 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+    </dependencies>
 
 	<build>
+		<finalName>kestiAirPollutionPredict</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

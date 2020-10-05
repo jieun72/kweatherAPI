@@ -15,6 +15,7 @@ import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.validation.Valid;
 
+import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
@@ -29,13 +30,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.API.main.Entity.predict_md1;
 import com.API.main.Entity.predict_md2;
+import com.API.main.Entity.spot_group_cd;
 import com.API.main.Repository.Predict_md2_Repository;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.API.main.Exception.ResourceNotFoundException;
 @RestController
-@RequestMapping("/KESTI/v1.1")
+@RequestMapping("/dayPrdtList")
 public class Predict_md2_Controller 
 {
+	//preety 사용 하기 위한 gson
+	private static final Gson gson = new GsonBuilder()
+	           .setPrettyPrinting()
+	           .create();
+	
+	
 	@PersistenceContext
 	EntityManager em;
 	
@@ -47,143 +60,163 @@ public class Predict_md2_Controller
 	{
 		return predict_md2_Repository.findAll();
 	}
-	@GetMapping("/md2/search")
-	public List<predict_md2> test(@RequestParam(value="spot_cd",required = false) String spot_cd_val, @RequestParam(value="prd_date",required = false) String prd_date_val, @RequestParam(value="cal_mode",required = false) String cal_mode_val)
+	
+	@GetMapping("/getMd2List")
+	public String getMd2List(@RequestParam HashMap<String,String> paramMap)
 	{
 		/*
 		 * EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa");
 		 * EntityManager em = emf.createEntityManager();
 		 */
+		boolean err = false;
+		//변수가 제대로 들어왔는지 체크하기 위함
+		String spot_cd_val = paramMap.get("spotCd");
+		String prd_date_val = paramMap.get("prdDate");
+		
+		//obj 에 담기위한 선언
+		final JsonObject gobj = new JsonObject();
+		//쿼리 사용하기 위한 선언
 		TypedQuery<predict_md2> query = null;
 		
-		if((spot_cd_val!=null)&&(prd_date_val!=null)&&(cal_mode_val!=null))
+		//들어온 개수를 파악하기 위함 ( err code 발생 조건을 채우기 위함)
+		int param_num = paramMap.size();
+		
+		//마지막 에 변환 해주기위한 array
+		JSONArray req_array = new JSONArray();
+		
+		String json="";
+		
+		List<Object[]> lst=null;
+		
+		
+		if((spot_cd_val!=null)&&(prd_date_val!=null))
 		{
-			query = em.createQuery("FROM predict_md2  WHERE spot_cd=:spot_cd AND prd_date=:prd_date AND cal_mode=:cal_mode", predict_md2.class)
-					.setParameter("spot_cd", spot_cd_val)
-					.setParameter("prd_date",prd_date_val)
-					.setParameter("cal_mode",cal_mode_val);
+			if(spot_cd_val.length()!=4 || prd_date_val.length()!=8 || !spot_cd_val.contains("SH"))
+			{
+				gobj.addProperty("resultCode", "02");
+				gobj.addProperty("resultMsg","ERROR");
+				gobj.addProperty("count","0");
+				err = true;
+			}
+			else
+			{
+				lst = em.createQuery("select cd.spot_nm,md2.prd_date,md2.cal_mode,md2.spot_lat,md2.spot_lon,md2.chk_fine_dust,md2.ozone,md2.carbon_monoxide,md2.nitrogen_dioxide,md2.sulfur_dioxide" + 
+						"from kweather_api.predict_md2 AS md2, " + 
+						"     kweather_api.spot_group_cd AS cd " + 
+						"where md2.spot_cd = cd.spot_cd " +
+						      "and md2.spot_cd=:spot_cd_val " +
+						      "and md2.prd_date=:prd_date_val " +
+						      "and md2.prd_time=:prd_time_val ")
+						.setParameter("md2.spot_cd", spot_cd_val)
+						.setParameter("md2.prd_date",prd_date_val).getResultList();
+			}
+			
 		}
-		else if((spot_cd_val!=null)&&(prd_date_val==null)&&(cal_mode_val!=null))
+		else if((spot_cd_val!=null)&&(prd_date_val==null))
 		{
-			query = em.createQuery("FROM predict_md2  WHERE spot_cd=:spot_cd AND cal_mode=:cal_mode", predict_md2.class)
-					.setParameter("spot_cd", spot_cd_val)
-					.setParameter("cal_mode",cal_mode_val);
+			if(param_num >=2 ) // 쿼리는 2개가 들어왔지만 upper_cd_val 은 null 이라 한다. 그러므로 err 발생
+			{
+				gobj.addProperty("resultCode", "01");
+				gobj.addProperty("resultMsg","ERROR");
+				gobj.addProperty("count","0");
+				err = true;
+			}
+			else
+			{
+				if(spot_cd_val.length()!=4 || !spot_cd_val.contains("SH"))
+				{
+					gobj.addProperty("resultCode", "02");
+					gobj.addProperty("resultMsg","ERROR");
+					gobj.addProperty("totalCount", "0");
+					err = true;
+				}
+				else
+				{
+					lst = em.createQuery("select cd.spot_nm,md2.prd_date,md2.cal_mode,md2.spot_lat,md2.spot_lon,md2.chk_fine_dust,md2.ozone,md2.carbon_monoxide,md2.nitrogen_dioxide,md2.sulfur_dioxide" + 
+							"from kweather_api.predict_md2 AS md2, " + 
+							"     kweather_api.spot_group_cd AS cd " + 
+							"where md2.spot_cd = cd.spot_cd " +
+							      "and md2.spot_cd=:spot_cd_val ")
+							.setParameter("md2.spot_cd", spot_cd_val).getResultList();
+				}
+				
+			}
+			
 		}
-		else if((spot_cd_val!=null)&&(prd_date_val!=null)&&(cal_mode_val==null))
+		else if((spot_cd_val==null)&&(prd_date_val!=null))
 		{
-			query = em.createQuery("FROM predict_md2  WHERE spot_cd=:spot_cd AND prd_date=:prd_date", predict_md2.class)
-					.setParameter("spot_cd", spot_cd_val)
-					.setParameter("prd_date",prd_date_val);
+			if(param_num >=2 ) // 쿼리는 2개가 들어왔지만 upper_cd_val 은 null 이라 한다. 그러므로 err 발생
+			{
+				gobj.addProperty("resultCode", "01");
+				gobj.addProperty("resultMsg","ERROR");
+				gobj.addProperty("count","0");
+				err = true;
+			}
+			else
+			{
+				if(prd_date_val.length()!=8)
+				{
+					gobj.addProperty("resultCode", "02");
+					gobj.addProperty("resultMsg","ERROR");
+					gobj.addProperty("count","0");
+					err = true;
+				}
+				lst = em.createQuery("select cd.spot_nm,md2.prd_date,md2.cal_mode,md2.spot_lat,md2.spot_lon,md2.chk_fine_dust,md2.ozone,md2.carbon_monoxide,md2.nitrogen_dioxide,md2.sulfur_dioxide" + 
+						"from kweather_api.predict_md2 AS md2, " + 
+						"     kweather_api.spot_group_cd AS cd " + 
+						"where md2.spot_cd = cd.spot_cd " +
+						      "and md2.prd_date=:prd_date_val ")
+						.setParameter("md2.prd_date",prd_date_val).getResultList();
+			}
+			
 		}
-		else if((spot_cd_val==null)&&(prd_date_val!=null)&&(cal_mode_val!=null))
+		else
 		{
-			query = em.createQuery("FROM predict_md2  WHERE  prd_date=:prd_date AND cal_mode=:cal_mode", predict_md2.class)
-					.setParameter("prd_date",prd_date_val)
-					.setParameter("cal_mode",cal_mode_val);
-		}
-		else if((spot_cd_val!=null)&&(prd_date_val==null)&&(cal_mode_val==null))
-		{
-			query = em.createQuery("FROM predict_md2  WHERE spot_cd=:spot_cd", predict_md2.class)
-					.setParameter("spot_cd", spot_cd_val);
-		}
-		else if((spot_cd_val==null)&&(prd_date_val!=null)&&(cal_mode_val==null))
-		{
-			query = em.createQuery("FROM predict_md2  WHERE  prd_date=:prd_date", predict_md2.class)
-					.setParameter("prd_date",prd_date_val);
-		}
-		else if((spot_cd_val==null)&&(prd_date_val==null)&&(cal_mode_val!=null))
-		{
-			query = em.createQuery("FROM predict_md2  WHERE cal_mode=:cal_mode", predict_md2.class)
-					.setParameter("cal_mode",cal_mode_val);
+			gobj.addProperty("resultCode", "99");
+			gobj.addProperty("resultMsg","ERROR");
+			gobj.addProperty("count","0");
+			
+			err = true;
 		}
 		
 		
 		List<predict_md2> list = null;
-		if(query != null)
+		//에러가 발생 하였다면
+		if(!err)
 		{
-			list = query.getResultList();
+			JsonArray ja = new JsonArray();
+			
+			for(int i=0;i<lst.size();i++)
+			{
+				final JsonObject gobj_buff = new JsonObject();
+				Object[] buff = lst.get(i);
+				
+				gobj_buff.addProperty("spotNm",buff[0].toString());
+				gobj_buff.addProperty("prdDate",buff[1].toString());
+				gobj_buff.addProperty("calMode",buff[2].toString());
+				
+				gobj_buff.addProperty("spotLat",buff[3].toString());
+				gobj_buff.addProperty("spotLon",buff[4].toString());
+				gobj_buff.addProperty("pm10",buff[5].toString());
+				gobj_buff.addProperty("pm2p5",buff[6].toString());
+				gobj_buff.addProperty("o3",buff[7].toString());
+				gobj_buff.addProperty("co",buff[8].toString());
+				gobj_buff.addProperty("no2",buff[9].toString());
+				gobj_buff.addProperty("so2",buff[10].toString());
+				
+				ja.add(gobj_buff);
+			}
+			
+			
+			gobj.addProperty("resultCode", "00");
+			gobj.addProperty("resultMsg","SUCCESS");
+			gobj.addProperty("count",list.size());
+			gobj.add("list",ja);
+			
 		}
+		req_array.add(gobj);
+		json= gson.toJson(req_array);
 		
-		return list;
+		return json;
 	}
-	/*public List<predict_md2> test(@RequestParam("spot_cd") String spot_cd, @RequestParam("prd_date") String prd_date, @RequestParam("cal_mode") String cal_mode)
-	{
-		if((spot_cd!=null)&&(prd_date!=null)&&(cal_mode!=null))
-		{
-			if((cal_mode=="AVG")||(cal_mode=="SDD")||(cal_mode=="MIN")||(cal_mode=="MAX"))
-			{
-				return predict_md2_Repository.findBymdALL(spot_cd, prd_date, cal_mode);
-			}
-			else
-			{
-				return null;
-			}
-		}
-		else if((spot_cd!=null)&&(prd_date==null)&&(cal_mode!=null))
-		{
-			if((cal_mode=="AVG")||(cal_mode=="SDD")||(cal_mode=="MIN")||(cal_mode=="MAX"))
-			{
-				return predict_md2_Repository.findBycd_mode(spot_cd, cal_mode);
-			}
-			else
-			{
-				return null;
-			}
-		}
-		else if((spot_cd!=null)&&(prd_date!=null)&&(cal_mode==null))
-		{
-			if((cal_mode=="AVG")||(cal_mode=="SDD")||(cal_mode=="MIN")||(cal_mode=="MAX"))
-			{
-				return predict_md2_Repository.findBycd_date(spot_cd, prd_date);
-			}
-			else
-			{
-				return null;
-			}
-		}
-		else if((spot_cd==null)&&(prd_date!=null)&&(cal_mode!=null))
-		{
-			if((cal_mode=="AVG")||(cal_mode=="SDD")||(cal_mode=="MIN")||(cal_mode=="MAX"))
-			{
-				return predict_md2_Repository.findBymddate_mode(prd_date, cal_mode);
-			}
-			else
-			{
-				return null;
-			}
-		}
-		else if((spot_cd!=null)&&(prd_date==null)&&(cal_mode==null))
-		{
-			return predict_md2_Repository.findBycd(spot_cd);
-		}
-		else if((spot_cd==null)&&(prd_date!=null)&&(cal_mode==null))
-		{
-			return predict_md2_Repository.findBymddate(prd_date);
-		}
-		else if((spot_cd==null)&&(prd_date==null)&&(cal_mode!=null))
-		{
-			if((cal_mode=="AVG")||(cal_mode=="SDD")||(cal_mode=="MIN")||(cal_mode=="MAX"))
-			{
-				return predict_md2_Repository.findBymdmode(cal_mode);
-			}
-			else
-			{
-				return null;
-			}
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	*/
-	/*
-	 * @GetMapping("/codegroup/{id}") public ResponseEntity<CodeGroup>
-	 * getCodeGroupById(@PathVariable(value = "id") String cd_group_id) throws
-	 * ResourceNotFoundException { CodeGroup codegroup =
-	 * codegroupRepository.findById(cd_group_id).orElseThrow(()->new
-	 * ResourceNotFoundException("CodeGroup not found for this id :: " +
-	 * cd_group_id)); return ResponseEntity.ok().body(codegroup); }
-	 */
 }
