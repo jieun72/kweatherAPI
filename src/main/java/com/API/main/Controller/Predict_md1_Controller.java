@@ -61,23 +61,6 @@ public class Predict_md1_Controller
 	}
 	
 	
-	@GetMapping("/test")
-	public String test(@RequestParam HashMap<String,String> paramMap)
-	{
-		String t = "";
-		
-		List<Object[]> lst =em.createQuery("select cd.spot_nm, md1.prd_date, md1.prd_time, md1.spot_lat, md1.spot_lon, md1.chk_fine_dust, md1.ozone, md1.carbon_monoxide, md1.nitrogen_dioxide, md1.sulfur_dioxide " + 
-				"from predict_md1 md1," + 
-				"     spot_group_cd cd " + 
-				"where md1.spot_cd = cd.spot_cd " +
-				      "and md1.spot_cd=:spot_cd")
-				.setParameter("spot_cd", "SH02").getResultList();
-		Object[] test = lst.get(0);
-		
-		System.out.println(test[0]);
-		
-		return t;
-	}
 	@GetMapping("/getMd1List")
 	public String getMd1List(@RequestParam HashMap<String,String> paramMap)
 	{
@@ -90,7 +73,6 @@ public class Predict_md1_Controller
 		//obj 에 담기위한 선언
 		final JsonObject gobj = new JsonObject();
 		//쿼리 사용하기 위한 선언
-		TypedQuery<predict_md1> query = null;
 		List<Object[]> lst=null;
 		
 		//들어온 개수를 파악하기 위함 ( err code 발생 조건을 채우기 위함)
@@ -101,8 +83,6 @@ public class Predict_md1_Controller
 		
 		String json="";
 		
-		
-		List<predict_md1> list = null;
 		
 		
 		//time 이 1자리숫자로 들어왔을때를 대비

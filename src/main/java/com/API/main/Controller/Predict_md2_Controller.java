@@ -75,8 +75,6 @@ public class Predict_md2_Controller
 		
 		//obj 에 담기위한 선언
 		final JsonObject gobj = new JsonObject();
-		//쿼리 사용하기 위한 선언
-		TypedQuery<predict_md2> query = null;
 		
 		//들어온 개수를 파악하기 위함 ( err code 발생 조건을 채우기 위함)
 		int param_num = paramMap.size();
