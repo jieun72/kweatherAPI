@@ -81,6 +81,7 @@ public class Predict_md1_Controller
 		//마지막 에 변환 해주기위한 array
 		JSONArray req_array = new JSONArray();
 		
+		//json 내용을 string 으로 담기 위함
 		String json="";
 		
 		
