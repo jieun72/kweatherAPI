@@ -98,15 +98,14 @@ public class Predict_md2_Controller
 			}
 			else
 			{
-				lst = em.createQuery("select cd.spot_nm,md2.prd_date,md2.cal_mode,md2.spot_lat,md2.spot_lon,md2.chk_fine_dust,md2.ozone,md2.carbon_monoxide,md2.nitrogen_dioxide,md2.sulfur_dioxide" + 
-						"from kweather_api.predict_md2 AS md2, " + 
-						"     kweather_api.spot_group_cd AS cd " + 
+				lst = em.createQuery("select cd.spot_nm,md2.prd_date,md2.cal_mode,md2.spot_lat,md2.spot_lon,md2.chk_fine_dust,md2.chk_ultrafine_dust,md2.ozone,md2.carbon_monoxide,md2.nitrogen_dioxide,md2.sulfur_dioxide " + 
+						"from predict_md2 AS md2, " + 
+						"     spot_group_cd AS cd " + 
 						"where md2.spot_cd = cd.spot_cd " +
-						      "and md2.spot_cd=:spot_cd_val " +
-						      "and md2.prd_date=:prd_date_val " +
-						      "and md2.prd_time=:prd_time_val ")
-						.setParameter("md2.spot_cd", spot_cd_val)
-						.setParameter("md2.prd_date",prd_date_val).getResultList();
+						      "and md2.spot_cd=:spot_cd " +
+						      "and md2.prd_date=:prd_date ")
+						.setParameter("spot_cd", spot_cd_val)
+						.setParameter("prd_date",prd_date_val).getResultList();
 			}
 			
 		}
@@ -130,12 +129,13 @@ public class Predict_md2_Controller
 				}
 				else
 				{
-					lst = em.createQuery("select cd.spot_nm,md2.prd_date,md2.cal_mode,md2.spot_lat,md2.spot_lon,md2.chk_fine_dust,md2.ozone,md2.carbon_monoxide,md2.nitrogen_dioxide,md2.sulfur_dioxide" + 
-							"from kweather_api.predict_md2 AS md2, " + 
-							"     kweather_api.spot_group_cd AS cd " + 
+					lst = em.createQuery("select cd.spot_nm, md2.prd_date, md2.cal_mode, md2.spot_lat, md2.spot_lon, md2.chk_fine_dust, md2.chk_ultrafine_dust, md2.ozone, md2.carbon_monoxide, md2.nitrogen_dioxide, md2.sulfur_dioxide " + 
+							"from predict_md2 md2, " + 
+								"spot_group_cd cd " + 
 							"where md2.spot_cd = cd.spot_cd " +
-							      "and md2.spot_cd=:spot_cd_val ")
-							.setParameter("md2.spot_cd", spot_cd_val).getResultList();
+							      "and md2.spot_cd=:spot_cd" )
+							.setParameter("spot_cd", spot_cd_val).getResultList();
+					
 				}
 				
 			}
@@ -159,12 +159,12 @@ public class Predict_md2_Controller
 					gobj.addProperty("count","0");
 					err = true;
 				}
-				lst = em.createQuery("select cd.spot_nm,md2.prd_date,md2.cal_mode,md2.spot_lat,md2.spot_lon,md2.chk_fine_dust,md2.ozone,md2.carbon_monoxide,md2.nitrogen_dioxide,md2.sulfur_dioxide" + 
-						"from kweather_api.predict_md2 AS md2, " + 
-						"     kweather_api.spot_group_cd AS cd " + 
+				lst = em.createQuery("select cd.spot_nm,md2.prd_date,md2.cal_mode,md2.spot_lat,md2.spot_lon,md2.chk_fine_dust, md2.chk_ultrafine_dust, md2.ozone,md2.carbon_monoxide,md2.nitrogen_dioxide,md2.sulfur_dioxide " + 
+						"from predict_md2 AS md2, " + 
+						"     spot_group_cd AS cd " + 
 						"where md2.spot_cd = cd.spot_cd " +
-						      "and md2.prd_date=:prd_date_val ")
-						.setParameter("md2.prd_date",prd_date_val).getResultList();
+						      "and md2.prd_date=:prd_date ")
+						.setParameter("prd_date",prd_date_val).getResultList();
 			}
 			
 		}
@@ -178,10 +178,10 @@ public class Predict_md2_Controller
 		}
 		
 		
-		List<predict_md2> list = null;
 		//에러가 발생 하였다면
 		if(!err)
 		{
+			
 			JsonArray ja = new JsonArray();
 			
 			for(int i=0;i<lst.size();i++)
@@ -208,7 +208,7 @@ public class Predict_md2_Controller
 			
 			gobj.addProperty("resultCode", "00");
 			gobj.addProperty("resultMsg","SUCCESS");
-			gobj.addProperty("count",list.size());
+			gobj.addProperty("count",lst.size());
 			gobj.add("list",ja);
 			
 		}

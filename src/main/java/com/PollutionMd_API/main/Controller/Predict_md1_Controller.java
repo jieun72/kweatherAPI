@@ -105,9 +105,9 @@ public class Predict_md1_Controller
 			}
 			else
 			{
-				lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide" + 
-						"from kweather_api.predict_md1 AS md1, " + 
-						"     kweather_api.spot_group_cd AS cd " + 
+				lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide " + 
+						"from predict_md1 AS md1, " + 
+						"     spot_group_cd AS cd " + 
 						"where md1.spot_cd = cd.spot_cd " +
 						      "and md1.spot_cd=:spot_cd " +
 						      "and md1.prd_date=:prd_date " +
@@ -138,9 +138,9 @@ public class Predict_md1_Controller
 				}
 				else
 				{
-					lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide" + 
-							"from kweather_api.predict_md1 AS md1, " + 
-							"     kweather_api.spot_group_cd AS cd " + 
+					lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide " + 
+							"from predict_md1 AS md1, " + 
+							"     spot_group_cd AS cd " + 
 							"where md1.spot_cd = cd.spot_cd " +
 							      "and md1.spot_cd=:spot_cd " +
 							      "and md1.prd_time=:prd_time ")
@@ -170,9 +170,9 @@ public class Predict_md1_Controller
 				}
 				else
 				{
-					lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide" + 
-							"from kweather_api.predict_md1 AS md1, " + 
-							"     kweather_api.spot_group_cd AS cd " + 
+					lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide " + 
+							"from predict_md1 AS md1, " + 
+							"     spot_group_cd AS cd " + 
 							"where md1.spot_cd = cd.spot_cd " +
 							      "and md1.spot_cd=:spot_cd " +
 							      "and md1.prd_date=:prd_date ")
@@ -202,9 +202,9 @@ public class Predict_md1_Controller
 				}
 				else
 				{
-					lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide" + 
-							"from kweather_api.predict_md1 AS md1," + 
-							"     kweather_api.spot_group_cd AS cd " + 
+					lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide " + 
+							"from predict_md1 AS md1," + 
+							"     spot_group_cd AS cd " + 
 							"where md1.spot_cd = cd.spot_cd " +
 							      "and md1.spot_cd=:spot_cd_val " +
 							      "and md1.prd_date=:prd_date " +
@@ -266,9 +266,9 @@ public class Predict_md1_Controller
 				}
 				else
 				{
-					lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide" + 
-							"from kweather_api.predict_md1 AS md1," + 
-							"     kweather_api.spot_group_cd AS cd " + 
+					lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide " + 
+							"from predict_md1 AS md1," + 
+							"     spot_group_cd AS cd " + 
 							"where md1.spot_cd = cd.spot_cd " +
 							      "and md1.prd_date=:prd_date" )
 							.setParameter("prd_date",prd_date_val).getResultList();
@@ -296,9 +296,9 @@ public class Predict_md1_Controller
 				}
 				else
 				{
-					lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide" + 
-							"from kweather_api.predict_md1 AS md1," + 
-							"     kweather_api.spot_group_cd AS cd " + 
+					lst = em.createQuery("select cd.spot_nm,md1.prd_date,md1.prd_time,md1.spot_lat,md1.spot_lon,md1.chk_fine_dust,md1.chk_ultrafine_dust,md1.ozone,md1.carbon_monoxide,md1.nitrogen_dioxide,md1.sulfur_dioxide " + 
+							"from predict_md1 AS md1," + 
+							"     spot_group_cd AS cd " + 
 							"where md1.spot_cd = cd.spot_cd " +
 							      "and md1.prd_time=:prd_time")
 							.setParameter("prd_time",prd_time_val).getResultList();
