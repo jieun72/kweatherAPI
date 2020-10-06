@@ -1,10 +1,10 @@
-package com.API.main.CompositeKey;
+package com.PollutionMd_API.main.CompositeKey;
 
 import java.io.Serializable;
 
 import javax.persistence.Column;
 
-public class predict_md1_CompositeKey implements Serializable
+public class Predict_md1_CompositeKey implements Serializable
 {
 	@Column(name = "spot_cd")
 	private String spot_cd; // 지점 코드

@@ -1,4 +1,4 @@
-package com.API.main.Controller;
+package com.PollutionMd_API.main.Controller;
 
 import static org.junit.Assert.assertEquals;
 
@@ -31,14 +31,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.API.main.Entity.predict_md1;
-import com.API.main.Entity.predict_md2;
-import com.API.main.Repository.Predict_md1_Repository;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.API.main.Exception.ResourceNotFoundException;
+import com.PollutionMd_API.main.Entity.predict_md1;
+import com.PollutionMd_API.main.Entity.predict_md2;
+import com.PollutionMd_API.main.Exception.ResourceNotFoundException;
+import com.PollutionMd_API.main.Repository.Predict_md1_Repository;
 @RestController
 @RequestMapping("/timePrdtList")
 public class Predict_md1_Controller 

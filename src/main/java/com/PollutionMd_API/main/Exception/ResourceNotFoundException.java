@@ -1,4 +1,4 @@
-package com.API.main.Exception;
+package com.PollutionMd_API.main.Exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -1,4 +1,4 @@
-package com.API.main.Controller;
+package com.PollutionMd_API.main.Controller;
 
 import static org.junit.Assert.assertEquals;
 
@@ -42,9 +42,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
-import com.API.main.Entity.predict_md1;
-import com.API.main.Entity.spot_group_cd;
-import com.API.main.Repository.Spot_group_cd_Repository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
@@ -52,9 +49,12 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.API.main.Exception.ErrorDetails;
-import com.API.main.Exception.GlobalExceptionHandler;
-import com.API.main.Exception.ResourceNotFoundException;
+import com.PollutionMd_API.main.Entity.predict_md1;
+import com.PollutionMd_API.main.Entity.spot_group_cd;
+import com.PollutionMd_API.main.Exception.ErrorDetails;
+import com.PollutionMd_API.main.Exception.GlobalExceptionHandler;
+import com.PollutionMd_API.main.Exception.ResourceNotFoundException;
+import com.PollutionMd_API.main.Repository.Spot_group_cd_Repository;
 
 @RestController
 @RequestMapping("/spotCodeList")

@@ -1,4 +1,4 @@
-package com.API.main.CompositeKey;
+package com.PollutionMd_API.main.CompositeKey;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.API.main;
+package com.PollutionMd_API.main;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

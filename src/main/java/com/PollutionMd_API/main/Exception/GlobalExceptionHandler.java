@@ -1,4 +1,4 @@
-package com.API.main.Exception;
+package com.PollutionMd_API.main.Exception;
 
 import java.util.Date;
 
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import com.API.main.Exception.ErrorDetails;
-import com.API.main.Exception.ResourceNotFoundException;
+import com.PollutionMd_API.main.Exception.ErrorDetails;
+import com.PollutionMd_API.main.Exception.ResourceNotFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler 

@@ -1,4 +1,4 @@
-package com.API.main.Entity;
+package com.PollutionMd_API.main.Entity;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.API.main.CompositeKey.Spot_group_cd_CompositeKey;
+import com.PollutionMd_API.main.CompositeKey.Spot_group_cd_CompositeKey;
 
 @Entity
 @IdClass(Spot_group_cd_CompositeKey.class)

@@ -1,4 +1,4 @@
-package com.API.main.Entity;
+package com.PollutionMd_API.main.Entity;
 
 
 import javax.persistence.Column;
@@ -7,17 +7,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
-import com.API.main.CompositeKey.predict_md2_CompositeKey;
+import com.PollutionMd_API.main.CompositeKey.Predict_md1_CompositeKey;
+import com.PollutionMd_API.main.CompositeKey.Spot_group_cd_CompositeKey;
 
 @Entity
-@IdClass(predict_md2_CompositeKey.class)
-@Table(schema="kweather_api",name="predict_md2")
-public class predict_md2 
+@IdClass(Predict_md1_CompositeKey.class)
+@Table(schema="kweather_api",name="predict_md1")
+public class predict_md1 
 {
 	@Id
 	private String spot_cd; // 지점 코드
@@ -26,7 +29,7 @@ public class predict_md2
 	private String prd_date; // 예측 날짜
 	
 	@Id
-	private String cal_mode; // 계측 방식
+	private String prd_time; // 계측 방식
 	
 	private String spot_lat; // 위도
 	private String spot_lon; // 경도
@@ -41,18 +44,18 @@ public class predict_md2
 	private String chg_dt; // 수정일자
 	private String chg_id; // 수정아이디
 	
-	public predict_md2()
+	public predict_md1()
 	{
 		
 	}
 
-	public predict_md2(String spot_cd, String prd_date, String cal_mode, String spot_lat, String spot_lon,
+	public predict_md1(String spot_cd, String prd_date, String prd_time, String spot_lat, String spot_lon,
 			String chk_fine_dust, String chk_ultrafine_dust, String ozone, String carbon_monoxide,
 			String nitrogen_dioxide, String sulfur_dioxide, String reg_dt, String reg_id, String chg_dt, String chg_id) {
 		super();
 		this.spot_cd = spot_cd;
 		this.prd_date = prd_date;
-		this.cal_mode = cal_mode;
+		this.prd_time = prd_time;
 		this.spot_lat = spot_lat;
 		this.spot_lon = spot_lon;
 		this.chk_fine_dust = chk_fine_dust;
@@ -67,7 +70,8 @@ public class predict_md2
 		this.chg_id = chg_id;
 	}
 
-	@Column(name="spot_cd", nullable=false)
+	@ManyToOne
+	@JoinColumn(name="spot_cd", nullable=false)
 	public String getSpot_cd() {
 		return spot_cd;
 	}
@@ -85,13 +89,13 @@ public class predict_md2
 		this.prd_date = prd_date;
 	}
 	
-	@Column(name="cal_mode", nullable=false)
-	public String getCal_mode() {
-		return cal_mode;
+	@Column(name="prd_time", nullable=false)
+	public String getPrd_time() {
+		return prd_time;
 	}
 
-	public void setCal_mode(String cal_mode) {
-		this.cal_mode = cal_mode;
+	public void setPrd_time(String prd_time) {
+		this.prd_time = prd_time;
 	}
 	
 	@Column(name="spot_lat", nullable=true)
@@ -207,7 +211,7 @@ public class predict_md2
 
 	@Override
 	public String toString() {
-		return "predict_md2 [spotNm=" + spot_cd + ", prdDate=" + prd_date + ", calMode=" + cal_mode + ", spotLat="
+		return "predict_md1 [spotNm=" + spot_cd + ", prdDate=" + prd_date + ", prdTime=" + prd_time + ", spotLat="
 				+ spot_lat + ", spotLon=" + spot_lon + ", pm10=" + chk_fine_dust + ", pm2p5="
 				+ chk_ultrafine_dust + ", o3=" + ozone + ", co=" + carbon_monoxide
 				+ ", no2=" + nitrogen_dioxide + ", so2=" + sulfur_dioxide + ", reg_dt=" + reg_dt

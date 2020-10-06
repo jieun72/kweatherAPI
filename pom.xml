@@ -8,12 +8,11 @@
 		<version>2.2.6.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.API</groupId>
-	<artifactId>API</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<groupId>com.PollutionMd_API</groupId>
+	<artifactId>PollutionMd_API</artifactId>
+	<version>PollutionMd_API_v1.2</version>
 	<name>API</name>
 	<packaging>jar</packaging>
-	<description>Demo project for Spring Boot</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -108,4 +107,5 @@
 		</plugins>
 	</build>
 
+	<description>Pollution Model API</description>
 </project>
