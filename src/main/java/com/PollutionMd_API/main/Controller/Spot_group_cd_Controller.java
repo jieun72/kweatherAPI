@@ -76,7 +76,53 @@ public class Spot_group_cd_Controller
 	{
 		return spot_group_cd_Repository.findAll();
 	}
-	
+	@GetMapping("/getSpotList/All")
+	public String getSpotList_All()
+	{
+		final JsonObject gobj = new JsonObject();
+		JSONArray req_array = new JSONArray();
+		String json="";
+		List<spot_group_cd> list = null;
+		TypedQuery<spot_group_cd> query = null; // 결과값 을 저장하기 위한 쿼리
+		
+		query = em.createQuery("FROM spot_group_cd ", spot_group_cd.class);
+		
+		JsonArray ja = new JsonArray();
+		
+		list = query.getResultList();
+		//json Object 를 array 에 담은후 해당 내용을 다시 json object 의 하나의 요소로 넣어 뽑기위한 전처리 작업.
+		for(int i=0;i<list.size();i++)
+		{
+			final JsonObject gobj_buff = new JsonObject();
+			String[] buff = list.get(i).toString().split(",");
+			for(int j=0;j<buff.length;j++)
+			{
+				if(buff[j].toLowerCase().contains("uppercd"))
+				{
+					gobj_buff.addProperty("upperCd",buff[j].split("=")[1].toString());
+				}
+				else if(buff[j].toLowerCase().contains("spotcd"))
+				{
+					gobj_buff.addProperty("spotCd",buff[j].split("=")[1].toString());
+				}
+				else if(buff[j].toLowerCase().contains("spotnm"))
+				{
+					gobj_buff.addProperty("spotNm",buff[j].split("=")[1].toString().split("}")[0].toString());
+				}
+			}
+			ja.add(gobj_buff);
+		}
+		gobj.addProperty("resultCode", "00");
+		gobj.addProperty("resultMsg","SUCCESS");
+		gobj.addProperty("count",list.size());
+		gobj.add("list",ja);
+		
+		req_array.add(gobj);
+		json= gson.toJson(req_array);
+		
+		return json;
+				
+	}
 	@GetMapping("/getSpotList")
 	public String getSpotList( @RequestParam HashMap<String,String> paramMap)
 	{
@@ -133,7 +179,7 @@ public class Spot_group_cd_Controller
 				}
 				else
 				{
-					query = em.createQuery("FROM spot_group_cd  WHERE spot_cd=:spot_cd", spot_group_cd.class)
+					query = em.createQuery("FROM spot_group_cd  WHERE spot_cd=:spot_cd and upper_cd!=spot_cd", spot_group_cd.class)
 							.setParameter("spot_cd",spot_cd_val);
 				}
 			}
@@ -158,7 +204,7 @@ public class Spot_group_cd_Controller
 				}
 				else
 				{
-					query = em.createQuery("FROM spot_group_cd  WHERE upper_cd=:upper_cd", spot_group_cd.class)
+					query = em.createQuery("FROM spot_group_cd  WHERE upper_cd=:upper_cd and upper_cd!=spot_cd", spot_group_cd.class)
 							.setParameter("upper_cd",upper_cd_val);
 				}
 				
