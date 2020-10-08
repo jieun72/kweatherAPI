@@ -17,27 +17,16 @@ import javax.validation.Valid;
 
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.PollutionMd_API.main.Entity.predict_md1;
 import com.PollutionMd_API.main.Entity.predict_md2;
-import com.PollutionMd_API.main.Entity.spot_group_cd;
-import com.PollutionMd_API.main.Exception.ResourceNotFoundException;
 import com.PollutionMd_API.main.Repository.Predict_md2_Repository;
 @RestController
 @RequestMapping("/dayPrdtList")
@@ -93,7 +82,7 @@ public class Predict_md2_Controller
 			{
 				gobj.addProperty("resultCode", "02");
 				gobj.addProperty("resultMsg","ERROR");
-				gobj.addProperty("count","0");
+				gobj.addProperty("totalCount","0");
 				err = true;
 			}
 			else
@@ -115,7 +104,7 @@ public class Predict_md2_Controller
 			{
 				gobj.addProperty("resultCode", "01");
 				gobj.addProperty("resultMsg","ERROR");
-				gobj.addProperty("count","0");
+				gobj.addProperty("totalCount","0");
 				err = true;
 			}
 			else
@@ -147,7 +136,7 @@ public class Predict_md2_Controller
 			{
 				gobj.addProperty("resultCode", "01");
 				gobj.addProperty("resultMsg","ERROR");
-				gobj.addProperty("count","0");
+				gobj.addProperty("totalCount","0");
 				err = true;
 			}
 			else
@@ -156,7 +145,7 @@ public class Predict_md2_Controller
 				{
 					gobj.addProperty("resultCode", "02");
 					gobj.addProperty("resultMsg","ERROR");
-					gobj.addProperty("count","0");
+					gobj.addProperty("totalCount","0");
 					err = true;
 				}
 				lst = em.createQuery("select cd.spot_nm,md2.prd_date,md2.cal_mode,md2.spot_lat,md2.spot_lon,md2.chk_fine_dust, md2.chk_ultrafine_dust, md2.ozone,md2.carbon_monoxide,md2.nitrogen_dioxide,md2.sulfur_dioxide " + 
@@ -172,13 +161,13 @@ public class Predict_md2_Controller
 		{
 			gobj.addProperty("resultCode", "99");
 			gobj.addProperty("resultMsg","ERROR");
-			gobj.addProperty("count","0");
+			gobj.addProperty("totalCount","0");
 			
 			err = true;
 		}
 		
 		
-		//에러가 발생 하였다면
+		//에러가 발생 하지 않았다면
 		if(!err)
 		{
 			
@@ -208,7 +197,7 @@ public class Predict_md2_Controller
 			
 			gobj.addProperty("resultCode", "00");
 			gobj.addProperty("resultMsg","SUCCESS");
-			gobj.addProperty("count",lst.size());
+			gobj.addProperty("totalCount",lst.size());
 			gobj.add("list",ja);
 			
 		}

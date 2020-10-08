@@ -13,7 +13,8 @@
 	<version>PollutionMd_API_v1.2</version>
 	<name>API</name>
 	<packaging>jar</packaging>
-
+	<description>Kesti Pollution Model AND SNU Model API for Kweather</description>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -107,5 +108,5 @@
 		</plugins>
 	</build>
 
-	<description>Kesti Pollution Model API For Kweather</description>
+	
 </project>

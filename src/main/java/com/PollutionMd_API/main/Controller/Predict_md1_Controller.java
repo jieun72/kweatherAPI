@@ -124,7 +124,7 @@ public class Predict_md1_Controller
 			{
 				gobj.addProperty("resultCode", "01");
 				gobj.addProperty("resultMsg","ERROR");
-				gobj.addProperty("count","0");
+				gobj.addProperty("totalCount","0");
 				err = true;
 			}
 			else
@@ -156,7 +156,7 @@ public class Predict_md1_Controller
 			{
 				gobj.addProperty("resultCode", "01");
 				gobj.addProperty("resultMsg","ERROR");
-				gobj.addProperty("count","0");
+				gobj.addProperty("totalCount","0");
 				err = true;
 			}
 			else
@@ -188,7 +188,7 @@ public class Predict_md1_Controller
 			{
 				gobj.addProperty("resultCode", "01");
 				gobj.addProperty("resultMsg","ERROR");
-				gobj.addProperty("count","0");
+				gobj.addProperty("totalCount","0");
 				err = true;
 			}
 			else
@@ -222,7 +222,7 @@ public class Predict_md1_Controller
 			{
 				gobj.addProperty("resultCode", "01");
 				gobj.addProperty("resultMsg","ERROR");
-				gobj.addProperty("count","0");
+				gobj.addProperty("totalCount","0");
 				err = true;
 			}
 			else
@@ -252,7 +252,7 @@ public class Predict_md1_Controller
 			{
 				gobj.addProperty("resultCode", "01");
 				gobj.addProperty("resultMsg","ERROR");
-				gobj.addProperty("count","0");
+				gobj.addProperty("totalCount","0");
 				err = true;
 			}
 			else
@@ -282,7 +282,7 @@ public class Predict_md1_Controller
 			{
 				gobj.addProperty("resultCode", "01");
 				gobj.addProperty("resultMsg","ERROR");
-				gobj.addProperty("count","0");
+				gobj.addProperty("totalCount","0");
 				err = true;
 			}
 			else
@@ -309,14 +309,14 @@ public class Predict_md1_Controller
 		{
 			gobj.addProperty("resultCode", "99");
 			gobj.addProperty("resultMsg","ERROR");
-			gobj.addProperty("count","0");
+			gobj.addProperty("totalCount","0");
 			
 			err = true;
 		}
 		
 		
 		
-		//에러가 발생 하였다면
+		//에러가 발생 하지 않았다면
 		if(!err)
 		{
 			JsonArray ja = new JsonArray();
@@ -344,7 +344,7 @@ public class Predict_md1_Controller
 			}
 			gobj.addProperty("resultCode", "00");
 			gobj.addProperty("resultMsg","SUCCESS");
-			gobj.addProperty("count",lst.size());
+			gobj.addProperty("totalCount",lst.size());
 			gobj.add("list",ja);
 			
 			

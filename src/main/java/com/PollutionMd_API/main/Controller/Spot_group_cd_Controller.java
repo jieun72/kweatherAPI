@@ -90,7 +90,7 @@ public class Spot_group_cd_Controller
 		JsonArray ja = new JsonArray();
 		
 		list = query.getResultList();
-		//json Object 를 array 에 담은후 해당 내용을 다시 json object 의 하나의 요소로 넣어 뽑기위한 전처리 작업.
+		// json Object 를 array 에 담은후 해당 내용을 다시 json object 의 하나의 요소로 넣어 뽑기위한 전처리 작업.
 		for(int i=0;i<list.size();i++)
 		{
 			final JsonObject gobj_buff = new JsonObject();
