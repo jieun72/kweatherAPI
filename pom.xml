@@ -12,7 +12,8 @@
 	<artifactId>PollutionMd_API</artifactId>
 	<version>PollutionMd_API_v1.2</version>
 	<name>API</name>
-	<packaging>jar</packaging>
+	<!--  <packaging>jar</packaging> -->
+	<packaging>war</packaging>
 	<description>Kesti Pollution Model AND SNU Model API for Kweather</description>
 	
 	<properties>
