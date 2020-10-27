@@ -1,6 +1,8 @@
 package com.PollutionMd_API.main.Entity;
 
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,9 +41,9 @@ public class predict_md1
 	private String carbon_monoxide; // 일산화 탄소
 	private String nitrogen_dioxide; // 이산화 질소
 	private String sulfur_dioxide; // 이산화 황
-	private String reg_dt; // 등록일자
+	private Date reg_dt; // 등록일자
 	private String reg_id; // 등록아이디
-	private String chg_dt; // 수정일자
+	private Date chg_dt; // 수정일자
 	private String chg_id; // 수정아이디
 	
 	public predict_md1()
@@ -51,7 +53,7 @@ public class predict_md1
 
 	public predict_md1(String spot_cd, String prd_date, String prd_time, String spot_lat, String spot_lon,
 			String chk_fine_dust, String chk_ultrafine_dust, String ozone, String carbon_monoxide,
-			String nitrogen_dioxide, String sulfur_dioxide, String reg_dt, String reg_id, String chg_dt, String chg_id) {
+			String nitrogen_dioxide, String sulfur_dioxide, Date reg_dt, String reg_id, Date chg_dt, String chg_id) {
 		super();
 		this.spot_cd = spot_cd;
 		this.prd_date = prd_date;
@@ -173,11 +175,11 @@ public class predict_md1
 /////////////////////////////////////
 	
 	@Column(name="reg_dt", nullable=false)
-	public String getReg_dt() {
+	public Date getReg_dt() {
 		return reg_dt;
 	}
 
-	public void setReg_dt(String reg_dt) {
+	public void setReg_dt(Date reg_dt) {
 		this.reg_dt = reg_dt;
 	}
 	
@@ -192,11 +194,11 @@ public class predict_md1
 ///////////////////////////////
 	
 	@Column(name="chg_dt", nullable=true)
-	public String getChg_dt() {
+	public Date getChg_dt() {
 		return chg_dt;
 	}
 
-	public void setChg_dt(String chg_dt) {
+	public void setChg_dt(Date chg_dt) {
 		this.chg_dt = chg_dt;
 	}
 	

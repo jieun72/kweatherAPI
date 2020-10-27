@@ -1,6 +1,7 @@
 package com.PollutionMd_API.main.Entity;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,9 +25,9 @@ public class spot_group_cd
 	private String spot_cd;
 	
 	private String spot_nm;
-	private String reg_dt;
+	private Date reg_dt;
 	private String reg_id;
-	private String chg_dt;
+	private Date chg_dt;
 	private String chg_id;
 
 	public spot_group_cd()
@@ -34,7 +35,7 @@ public class spot_group_cd
 		
 	}
 
-	public spot_group_cd(String upper_cd, String spot_cd, String spot_nm, String reg_dt, String reg_id, String chg_dt,
+	public spot_group_cd(String upper_cd, String spot_cd, String spot_nm, Date reg_dt, String reg_id, Date chg_dt,
 			String chg_id) {
 		super();
 		this.upper_cd = upper_cd;
@@ -75,11 +76,11 @@ public class spot_group_cd
 	}
 	
 	@Column(name="reg_dt", nullable=false)
-	public String getReg_dt() {
+	public Date getReg_dt() {
 		return reg_dt;
 	}
 
-	public void setReg_dt(String reg_dt) {
+	public void setReg_dt(Date reg_dt) {
 		this.reg_dt = reg_dt;
 	}
 
@@ -93,11 +94,11 @@ public class spot_group_cd
 	}
 
 	@Column(name="chg_dt", nullable=true)
-	public String getChg_dt() {
+	public Date getChg_dt() {
 		return chg_dt;
 	}
 
-	public void setChg_dt(String chg_dt) {
+	public void setChg_dt(Date chg_dt) {
 		this.chg_dt = chg_dt;
 	}
 

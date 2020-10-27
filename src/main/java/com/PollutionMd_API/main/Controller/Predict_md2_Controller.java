@@ -29,7 +29,7 @@ import com.google.gson.JsonObject;
 import com.PollutionMd_API.main.Entity.predict_md2;
 import com.PollutionMd_API.main.Repository.Predict_md2_Repository;
 @RestController
-@RequestMapping("/dayPrdtList")
+@RequestMapping(value = "/dayPrdtList",produces = "application/json; charset=utf8")
 public class Predict_md2_Controller 
 {
 	//preety 사용 하기 위한 gson

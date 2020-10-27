@@ -40,7 +40,7 @@ import com.PollutionMd_API.main.Entity.predict_md2;
 import com.PollutionMd_API.main.Exception.ResourceNotFoundException;
 import com.PollutionMd_API.main.Repository.Predict_md1_Repository;
 @RestController
-@RequestMapping("/timePrdtList")
+@RequestMapping(value = "/timePrdtList", produces = "application/json; charset=utf8")
 public class Predict_md1_Controller 
 {
 	//preety 사용 하기 위한 gson
@@ -302,6 +302,7 @@ public class Predict_md1_Controller
 							"where md1.spot_cd = cd.spot_cd " +
 							      "and md1.prd_time=:prd_time")
 							.setParameter("prd_time",prd_time_val).getResultList();
+				
 				}
 			}
 		}
@@ -356,7 +357,7 @@ public class Predict_md1_Controller
 		}
 		req_array.add(gobj);
 		json= gson.toJson(req_array);
-		
+		System.out.println(json);
 		return json;
 	}
 	

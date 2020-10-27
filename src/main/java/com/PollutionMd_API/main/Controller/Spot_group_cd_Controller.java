@@ -57,7 +57,7 @@ import com.PollutionMd_API.main.Exception.ResourceNotFoundException;
 import com.PollutionMd_API.main.Repository.Spot_group_cd_Repository;
 
 @RestController
-@RequestMapping("/spotCodeList")
+@RequestMapping(value = "/spotCodeList",produces = "application/json; charset=utf8")
 public class Spot_group_cd_Controller
 {
 	private static final Gson gson = new GsonBuilder()
