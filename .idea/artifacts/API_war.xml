@@ -7,7 +7,7 @@
         <packaging>war</packaging>
       </options>
     </properties>
-    <root id="archive" name="API-0.0.1-SNAPSHOT.war">
+    <root id="archive" name="PollutionMd_API-PollutionMd_API_v1.2.war">
       <element id="artifact" artifact-name="API:war exploded" />
     </root>
   </artifact>

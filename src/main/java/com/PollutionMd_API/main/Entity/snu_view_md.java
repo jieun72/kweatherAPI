@@ -13,13 +13,13 @@ import com.PollutionMd_API.main.CompositeKey.Snu_view_md_CompositeKey;
 @Entity
 @IdClass(Snu_view_md_CompositeKey.class)
 @Table(schema="kweather_api",name="snu_view_md")
-public class snu_view_md 
+public class snu_view_md
 {
 	@Id
 	String mse_date;
 	@Id
 	String spot_cd;
-	
+
 	String spot_lat;
 	String spot_lon;
 	String heat_val;
@@ -37,16 +37,18 @@ public class snu_view_md
 	String reg_id;
 	Date chg_dt;
 	String chg_id;
-	
+	String mobile_val;
+	String etcl_val;
+
 	public snu_view_md()
 	{
-		
+
 	}
 
 	public snu_view_md(String mse_date, String spot_cd, String spot_lat, String spot_lon, String heat_val,
 			String bio_val, String seasalt_val, String oil_val, String sulfate2th_val, String road_val,
 			String nitrate2th_val, String soil_val, String industry_val, String coal_val, String pm2p5_val,
-			Date reg_dt, String reg_id, Date chg_dt, String chg_id) {
+			Date reg_dt, String reg_id, Date chg_dt, String chg_id, String mobile_val, String etcl_val) {
 		super();
 		this.mse_date = mse_date;
 		this.spot_cd = spot_cd;
@@ -67,6 +69,8 @@ public class snu_view_md
 		this.reg_id = reg_id;
 		this.chg_dt = chg_dt;
 		this.chg_id = chg_id;
+		this.mobile_val = mobile_val;
+		this.etcl_val = etcl_val;
 	}
 
 	@Column(name="mse_date", nullable=false)
@@ -240,13 +244,37 @@ public class snu_view_md
 		this.chg_id = chg_id;
 	}
 
+	@Column(name="mobile_val", nullable=true)
+	public String getMobile_val() {
+		return mobile_val;
+	}
+
+	public void setMobile_val(String mobile_val) {
+		this.mobile_val = mobile_val;
+	}
+
+	@Column(name="etcl_val", nullable=true)
+	public String getEtcl_val() {
+		return etcl_val;
+	}
+
+	public void setEtcl_val(String etcl_val) {
+		this.etcl_val = etcl_val;
+	}
+
 	@Override
 	public String toString() {
-		return "{mse_date=" + mse_date + ", spot_cd=" + spot_cd + ", spot_lat=" + spot_lat + ", spot_lon="
-				+ spot_lon + ", heat_val=" + heat_val + ", bio_val=" + bio_val + ", seasalt_val=" + seasalt_val
-				+ ", oil_val=" + oil_val + ", sulfate2th_val=" + sulfate2th_val + ", road_val=" + road_val
-				+ ", nitrate2th_val=" + nitrate2th_val + ", soil_val=" + soil_val + ", industry_val=" + industry_val
-				+ ", coal_val=" + coal_val + ", pm2p5_val=" + pm2p5_val+ "}";
+		return "{mse_date=" + mse_date + ", spot_cd=" + spot_cd + ", spot_lat=" + spot_lat + ", spot_lon="  + spot_lon
+				+ ", industry_val=" + industry_val
+				+ ", coal_val=" + coal_val
+				+ ", sulfate2th_val=" + sulfate2th_val
+				+ ", mobile_val=" + mobile_val
+				+ ", nitrate2th_val=" + nitrate2th_val
+				+ ", soil_val=" + soil_val
+				+ ", seasalt_val=" + seasalt_val
+				+ ", etcl_val=" + etcl_val
+				+ ", pm2p5_val=" + pm2p5_val
+				+ "}";
 	}
-	
+
 }

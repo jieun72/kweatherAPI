@@ -185,29 +185,21 @@ public class Snu_view_md_Controller
 					{
 						gobj_buff.addProperty("spotLon",v.toString());
 					}
-					else if(key.toLowerCase().equals("heat_val"))
+					else if(key.toLowerCase().equals("industry_val"))
 					{
-						gobj_buff.addProperty("heatVal",v.toString());
+						gobj_buff.addProperty("industryVal",v.toString());
 					}
-					else if(key.toLowerCase().equals("bio_val"))
+					else if(key.toLowerCase().equals("coal_val"))
 					{
-						gobj_buff.addProperty("bioVal",v.toString());
-					}
-					else if(key.toLowerCase().equals("seasalt_val"))
-					{
-						gobj_buff.addProperty("seasaltVal",v.toString());
-					}
-					else if(key.toLowerCase().equals("oil_val"))
-					{
-						gobj_buff.addProperty("oilVal",v.toString());
+						gobj_buff.addProperty("coalVal",v.toString());
 					}
 					else if(key.toLowerCase().equals("sulfate2th_val"))
 					{
 						gobj_buff.addProperty("sulfate2thVal",v.toString());
 					}
-					else if(key.toLowerCase().equals("road_val"))
+					else if(key.toLowerCase().equals("mobile_val"))
 					{
-						gobj_buff.addProperty("roadVal",v.toString());
+						gobj_buff.addProperty("mobileVal",v.toString());
 					}
 					else if(key.toLowerCase().equals("nitrate2th_val"))
 					{
@@ -217,13 +209,13 @@ public class Snu_view_md_Controller
 					{
 						gobj_buff.addProperty("soilVal",v.toString());
 					}
-					else if(key.toLowerCase().equals("industry_val"))
+					else if(key.toLowerCase().equals("seasalt_val"))
 					{
-						gobj_buff.addProperty("industryVal",v.toString());
+						gobj_buff.addProperty("seasaltVal",v.toString());
 					}
-					else if(key.toLowerCase().equals("coal_val"))
+					else if(key.toLowerCase().equals("etcl_val"))
 					{
-						gobj_buff.addProperty("coalVal",v.toString());
+						gobj_buff.addProperty("etclVal",v.toString());
 					}
 					else if(key.toLowerCase().equals("pm2p5_val"))
 					{
