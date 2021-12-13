@@ -51,7 +51,7 @@ jobs:
               kill -9 `ps -ef | grep -v grep | grep "java -jar kweather-api.war" | awk '{print $2}'`
             fi
             rm -f kweather-api.war
-            mv ./build/libs/kweather-api.war .
-            rm -rf ./module
+            mv ./target/kweather-api.war .
+            rm -rf ./target
             chmod +x kweather-api.war
             java -jar kweather-api.war >> kweather-api.log &
